@@ -31,16 +31,25 @@ implementation
 procedure TfrmFibonacci.btnInstrucaoClick(Sender: TObject);
 begin
   //Exibe informações na tela
-  Showmessage('Digite quantidade de sequências que deseja retornar'+#13#10+'(Menor que 91).'+#13#10+'Após isso clique em strat!');
+  Showmessage('Digite quantidade de sequências que deseja retornar'+#13#10+'(Menor que 91).'+#13#10+'Após isso clique em start!');
 end;
 
 procedure TfrmFibonacci.btnStartClick(Sender: TObject);
 Var
   iNum1, iNum2, iMax, iSoma : Int64;
   i : integer;
+  sEdtEntrada : string;
 begin
+  sEdtEntrada := edtEntrada.Text;
   mmoResultado.Clear;
-  iMax := StrToInt(edtEntrada.Text);
+  if sEdtEntrada = '' then
+  begin
+    ShowMessage('Valor Inválido!');
+    edtEntrada.SetFocus;
+    exit;
+  end;
+
+  iMax := StrToInt(sEdtEntrada);
 
   if iMax > 90 then
   begin
@@ -52,7 +61,6 @@ begin
 
   iNum1 := 0;
   iNum2 := 1;
-
   //Preencher Memo
   for i := 1 to iMax do
   begin
@@ -62,13 +70,19 @@ begin
     iNum2 := iSoma;
   end;
 
+  edtEntrada.Clear;
 end;
 
 procedure TfrmFibonacci.edtEntradaKeyPress(Sender: TObject; var Key: Char);
 begin
-  //Aceita apenas números
-  if not CharInSet(Key, ['0'..'9', #8]) then
-    Key := #0;
+  // Permite apenas dois números
+  if not (CharInSet(Key, ['0'..'9', #8]) and (Length(edtEntrada.Text) < 2)) then
+  begin
+    if not (Key = #8) then
+      Key := #0;
+  end;
 end;
+
+
 
 end.
